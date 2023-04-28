@@ -1,0 +1,39 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+.imgtop{
+    height: 150px!important;
+    object-fit: cover;
+}
+.pagina{
+    position: absolute;
+    top: 20%;
+    left: 50%;
+}
+.icon{
+    object-fit: contain;
+    height: 45px;
+    margin-top: 0.2rem;
+    margin-left: 0.2rem;
+}
+
+
+main{
+    min-height: 80vh;
+    margin-bottom: 50px;
+    flex-grow: 0!important;
+}
+
+footer{
+    min-height: 10vh;
+}
+
+.formcontact{
+    min-height: 40vh;
+}
+
+.boton{
+    margin-right: 15px;
+}
