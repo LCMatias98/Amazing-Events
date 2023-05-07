@@ -32,8 +32,23 @@ footer{
 
 .formcontact{
     min-height: 40vh;
+    
 }
-
+.formcontact {
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2), 0px 0px 10px rgba(0, 0, 0, 0.1) inset;
+  }
+  
 .boton{
     margin-right: 15px;
+}
+
+.articles{
+
+    background: linear-gradient(145deg, #ffffff, #dedbdb);
+    box-shadow:  26px 26px 53px #636161,
+                 -26px -26px 53px #ffffff;
+}
+
+.card-img-top{
+    height:230px !important;
 }
