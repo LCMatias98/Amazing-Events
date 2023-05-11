@@ -3,16 +3,34 @@ let seccion = document.getElementById("idseccion")
 let formulario = document.getElementById("formularioEventos")
 let search = document.getElementById("search")
 let containerCheckbox = document.getElementById("containerCheckbox")
+let navitem = document.getElementsByClassName("nav-item")
 
 let categoria = data.events.map((evento) => evento.category)
 let setCategoria = new Set(categoria)
 let arrayCategoria = Array.from(setCategoria)
+const currentUrl = window.location.href;
 /* console.log(arrayCategoria) */
 /* console.log(setCategoria) */
 /* article = document.getElementById("articleCard") */
 /* console.log(article.innerHTML = "prueba") */
 /* seccion.innerHTML = "borrar" */
 /* console.log(data.events) */
+// Obtener la URL actual
+
+
+// Obtengo los elementos "a" dentro de los elementos "li" y le agrego clase active
+const links = document.querySelectorAll(".navbar-nav li a");
+console.log(window.location)
+console.log(navitem)
+console.log(links)
+for (let link of links) {
+  if (link.href === currentUrl) {
+    // padre de link (a) que es li 
+    link.parentElement.classList.add("active");
+  }
+}
+
+
 
 
 
@@ -31,7 +49,7 @@ function crearCard(evento){
       <p class="card-text">${evento.description}</p>
       <div class="d-flex justify-content-between align-items-center">
         <p class="card-text mt-2">${evento.price}</p>
-        <a href="./details.html" class="btn btn-secondary">Go somewhere</a>
+        <a href="./details.html?id=${evento._id}" class="btn btn-secondary">Go somewhere</a>
       </div>
     </div>
   </article>`

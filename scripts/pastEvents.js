@@ -7,6 +7,16 @@ let categoria = data.events.map((evento) => evento.category)
 let setCategoria = new Set(categoria)
 let arrayCategoria = Array.from(setCategoria)
 console.log(arrayCategoria)
+const currentUrl = window.location.href;
+const links = document.querySelectorAll(".navbar-nav li a");
+
+
+for (let link of links) {
+  if (link.href === currentUrl) {
+    link.parentElement.classList.add("active");
+  }
+}
+
 
 
 function crearCard(evento){
@@ -21,7 +31,7 @@ function crearCard(evento){
       <p class="card-text">${evento.description}</p>
       <div class="d-flex justify-content-between align-items-center">
         <p class="card-text mt-2">${evento.price}</p>
-        <a href="./details.html" class="btn btn-secondary">Go somewhere</a>
+        <a href="./details.html?id=${evento._id}" class="btn btn-secondary">Go somewhere</a>
       </div>
     </div>
   </article>`

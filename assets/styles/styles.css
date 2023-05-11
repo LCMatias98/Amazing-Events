@@ -52,18 +52,38 @@ footer{
 .card-img-top{
     height:230px !important;
 }
+.card-img-details {
+    object-fit: cover;
+    max-width: 100%;
+    height: auto;
+  }
+  
+  #card:hover{
+    box-Shadow: 0px 0px 30px rgba(0, 0, 0, 0.3);
+    transform : scale(1.05);
+    transition: all 0.3s ease;
+  }
+  
+  #card:hover{
+    box-Shadow:'0px 0px 20px rgba(0, 0, 0, 0.2)';
+    transform: 'scale(1)';
+    transition: 'all 0.3s ease';
+  }
+  
+
+  #articleCard:hover{
+    box-Shadow: 0px 0px 30px rgba(0, 0, 0, 0.3);
+    transform : scale(1.05);
+    transition: all 0.3s ease;
+  }
+  
+  #articleCard:hover{
+    box-Shadow:'0px 0px 20px rgba(0, 0, 0, 0.2)';
+    transform: 'scale(1)';
+    transition: 'all 0.3s ease';
+  }
 
 
-const card = document.querySelector('.card');
-
-card.addEventListener('mouseover', function() {
-  card.style.boxShadow = '0px 0px 30px rgba(0, 0, 0, 0.3)';
-  card.style.transform = 'scale(1.05)';
-  card.style.transition = 'all 0.3s ease';
-});
-
-card.addEventListener('mouseout', function() {
-  card.style.boxShadow = '0px 0px 20px rgba(0, 0, 0, 0.2)';
-  card.style.transform = 'scale(1)';
-  card.style.transition = 'all 0.3s ease';
-});
+  .navbar-nav li.active a {
+    color: red;
+  }
