@@ -7,3 +7,14 @@ for (let link of links) {
     link.parentElement.classList.add("active");
   }
 }
+
+
+let data
+
+fetch('https://mindhub-xj03.onrender.com/api/amazing')
+  .then(response => response.json())
+  .then(infoData => {
+    data = infoData
+    console.log(data);
+  })
+  .catch(error => console.error(error))

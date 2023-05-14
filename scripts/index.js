@@ -1,36 +1,40 @@
-/* console.log(data.events[0]) */
+let data
+
+fetch('https://mindhub-xj03.onrender.com/api/amazing')
+  .then(response => response.json())
+  .then(infoData => {
+    data = infoData
+    console.log(data);
+    let categoria = data.events.map((evento) => evento.category)
+    //let categoria = data.events.map((evento) => evento.category)
+    let setCategoria = new Set(categoria)
+    let arrayCategoria = Array.from(setCategoria)
+
+    llenarSeccion(data, seccion)
+
+    const templateCheckbox = arrayCategoria.reduce(funcionReduce, ``)
+//console.log(templateCheckbox)
+    containerCheckbox.innerHTML = templateCheckbox
+  })
+  .catch(error => console.error(error))
+
+
 let seccion = document.getElementById("idseccion") 
 let formulario = document.getElementById("formularioEventos")
 let search = document.getElementById("search")
 let containerCheckbox = document.getElementById("containerCheckbox")
-let navitem = document.getElementsByClassName("nav-item")
 
-let categoria = data.events.map((evento) => evento.category)
-let setCategoria = new Set(categoria)
-let arrayCategoria = Array.from(setCategoria)
+
 const currentUrl = window.location.href;
-/* console.log(arrayCategoria) */
-/* console.log(setCategoria) */
-/* article = document.getElementById("articleCard") */
-/* console.log(article.innerHTML = "prueba") */
-/* seccion.innerHTML = "borrar" */
-/* console.log(data.events) */
-// Obtener la URL actual
 
-
-// Obtengo los elementos "a" dentro de los elementos "li" y le agrego clase active
 const links = document.querySelectorAll(".navbar-nav li a");
-console.log(window.location)
-console.log(navitem)
-console.log(links)
+
 for (let link of links) {
   if (link.href === currentUrl) {
     // padre de link (a) que es li 
     link.parentElement.classList.add("active");
   }
 }
-
-
 
 
 
@@ -54,7 +58,6 @@ function crearCard(evento){
     </div>
   </article>`
 }
-/* <<<<<<<<<< */
 
 function llenarSeccion(data, elemento){
     elemento.innerHTML = ""
@@ -63,7 +66,7 @@ function llenarSeccion(data, elemento){
     elemento.innerHTML = newTemplate
 }
 
-llenarSeccion(data, seccion)
+
 
 
 /* Funcion para filtrar desde el Input */
@@ -71,12 +74,11 @@ llenarSeccion(data, seccion)
     return data.events.filter((evento) => evento.name.toLowerCase().includes(search.toLowerCase()))
  }
 
-search.addEventListener("input",()=>{
+search.addEventListener("input",(e)=>{
   filtrarPorBusqueda = filtrarPorName(data, search.value)
-  //console.log(filtrarPorBusqueda)
-  llenarSeccionConBusqueda(filtrarPorBusqueda ,seccion)
-
-})
+    llenarSeccionConBusqueda(filtrarPorBusqueda ,seccion)
+  }
+)
 
 function llenarSeccionConBusqueda(data, elemento){
   elemento.innerHTML = ""
@@ -93,19 +95,15 @@ const funcionReduce = (acumulador, elementoActual, indice, array) =>{
                         </div>`
 }
 
-const templateCheckbox = arrayCategoria.reduce(funcionReduce, ``)
-//console.log(templateCheckbox)
 
-containerCheckbox.innerHTML = templateCheckbox
+
 
 containerCheckbox.addEventListener("change", (e)=>{
   //console.log("tocaste check")
   const checkboxChecked = Array.from( document.querySelectorAll(`input[type="checkbox"]:checked`)).map((check) =>check.value)
-  /* console.log(checkboxChecked) */
+/*  console.log(checkboxChecked)  */
   const eventoFiltrado = filtrarPorEventos(data, checkboxChecked)
-    /* necesito convertir el array de objetos eventoFiltrado a objeto */
-/*   const objectDeEventoFiltrado = Object.assign({}, eventoFiltrado)
-  console.log(objectDeEventoFiltrado) */
+
    llenarSeccionConBusqueda(eventoFiltrado,seccion)
   
 })
