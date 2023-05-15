@@ -1,4 +1,9 @@
 let data
+let search = document.getElementById("search")
+let seccion = document.getElementById("idseccion") 
+let formulario = document.getElementById("formularioEventos")
+let containerCheckbox = document.getElementById("containerCheckbox")
+const links = document.querySelectorAll(".navbar-nav li a");
 
 fetch('https://mindhub-xj03.onrender.com/api/amazing')
   .then(response => response.json())
@@ -6,38 +11,36 @@ fetch('https://mindhub-xj03.onrender.com/api/amazing')
     data = infoData
     console.log(data);
     let categoria = data.events.map((evento) => evento.category)
-    //let categoria = data.events.map((evento) => evento.category)
     let setCategoria = new Set(categoria)
     let arrayCategoria = Array.from(setCategoria)
 
-    llenarSeccion(data, seccion)
-
+    llenarSeccion(data.events, seccion)
     const templateCheckbox = arrayCategoria.reduce(funcionReduce, ``)
-//console.log(templateCheckbox)
     containerCheckbox.innerHTML = templateCheckbox
+
+    search.addEventListener("input",(e)=>{
+      let filtrarPorEvento = filtrarPorEventos(data.events)
+      let filtrarPorBusqueda = filtrarPorName(filtrarPorEvento, search.value)
+      llenarSeccion(filtrarPorBusqueda,seccion)
+      }
+    )
+    containerCheckbox.addEventListener("change", (e)=>{
+      let filtrarPorEvento = filtrarPorEventos(data.events)
+      let filtrarPorBusqueda = filtrarPorName(filtrarPorEvento, search.value)
+      llenarSeccion(filtrarPorBusqueda,seccion)
+    })
+    
+
   })
   .catch(error => console.error(error))
 
-
-let seccion = document.getElementById("idseccion") 
-let formulario = document.getElementById("formularioEventos")
-let search = document.getElementById("search")
-let containerCheckbox = document.getElementById("containerCheckbox")
-
-
 const currentUrl = window.location.href;
-
-const links = document.querySelectorAll(".navbar-nav li a");
-
 for (let link of links) {
   if (link.href === currentUrl) {
     // padre de link (a) que es li 
     link.parentElement.classList.add("active");
   }
 }
-
-
-
 
 let eventoMostrado = []
 
@@ -62,30 +65,14 @@ function crearCard(evento){
 function llenarSeccion(data, elemento){
     elemento.innerHTML = ""
     let newTemplate = ""
-    data.events.forEach( evento => newTemplate += crearCard(evento) )
+    data.forEach( evento => newTemplate += crearCard(evento) )
     elemento.innerHTML = newTemplate
 }
 
-
-
-
-/* Funcion para filtrar desde el Input */
  function filtrarPorName(data, search){
-    return data.events.filter((evento) => evento.name.toLowerCase().includes(search.toLowerCase()))
+   let filtrarPorNames= data.filter((evento) => evento.name.toLowerCase().includes(search.toLowerCase()))
+    return filtrarPorNames
  }
-
-search.addEventListener("input",(e)=>{
-  filtrarPorBusqueda = filtrarPorName(data, search.value)
-    llenarSeccionConBusqueda(filtrarPorBusqueda ,seccion)
-  }
-)
-
-function llenarSeccionConBusqueda(data, elemento){
-  elemento.innerHTML = ""
-  let newTemplate = ""
-  data.forEach( evento => newTemplate += crearCard(evento) )
-  elemento.innerHTML = newTemplate
-}
 
 
 const funcionReduce = (acumulador, elementoActual, indice, array) =>{
@@ -96,21 +83,12 @@ const funcionReduce = (acumulador, elementoActual, indice, array) =>{
 }
 
 
-
-
-containerCheckbox.addEventListener("change", (e)=>{
-  //console.log("tocaste check")
-  const checkboxChecked = Array.from( document.querySelectorAll(`input[type="checkbox"]:checked`)).map((check) =>check.value)
-/*  console.log(checkboxChecked)  */
-  const eventoFiltrado = filtrarPorEventos(data, checkboxChecked)
-
-   llenarSeccionConBusqueda(eventoFiltrado,seccion)
-  
-})
-
-function filtrarPorEventos(data, categoria){
+function filtrarPorEventos(data){
+  const categoria = Array.from( document.querySelectorAll(`input[type="checkbox"]:checked`)).map((check) =>check.value)
   if(categoria.length == 0){
-    return data.events
+    return data
   }
-  return data.events.filter((evento) => categoria.includes(evento.category))
+  return data.filter((evento) => categoria.includes(evento.category))
 }
+
+console.log(data)

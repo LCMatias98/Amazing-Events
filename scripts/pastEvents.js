@@ -1,58 +1,46 @@
 let data
+let seccion = document.getElementById("idseccion") 
+let formulario = document.getElementById("formularioEventos")
+let search = document.getElementById("search")
+let containerCheckbox = document.getElementById("containerCheckbox")
+const links = document.querySelectorAll(".navbar-nav li a");
 
 fetch('https://mindhub-xj03.onrender.com/api/amazing')
   .then(response => response.json())
   .then(infoData => {
     data = infoData
-    console.log(data);
     let categoria = data.events.map((evento) => evento.category)
-    //let categoria = data.events.map((evento) => evento.category)
     let setCategoria = new Set(categoria)
     let arrayCategoria = Array.from(setCategoria)
-    const fechaAntesdeCurrentDate = data.events.filter((evento) => evento.date < data.currentDate)
     const templateCheckbox = arrayCategoria.reduce(funcionReduce, ``)
+
     containerCheckbox.innerHTML = templateCheckbox
-    llenarSeccion(fechaAntesdeCurrentDate, seccion)
-
-    search.addEventListener("input",()=>{
-      filtrarPorBusqueda = filtrarPorName(fechaAntesdeCurrentDate, search.value)
-      console.log(filtrarPorBusqueda)
-      llenarSeccion(filtrarPorBusqueda ,seccion)
-      
-      })
-    containerCheckbox.addEventListener("change", (e)=>{
-
-      const checkboxChecked = Array.from( document.querySelectorAll(`input[type="checkbox"]:checked`)).map((check) =>check.value)
-      const eventoFiltrado = filtrarPorEventos(fechaAntesdeCurrentDate, checkboxChecked)
-        llenarSeccionConBusqueda(eventoFiltrado,seccion)
-      })
+    const fechaAntesDeCurrentDate = data.events.filter((evento) => evento.date < data.currentDate)
     
-    function filtrarPorEventos(fechaAntesdeCurrentDate, categoria){
-      if(categoria.length == 0){
-        return fechaAntesdeCurrentDate
-      }
-    return fechaAntesdeCurrentDate.filter((evento) => categoria.includes(evento.category))
-    }
+    llenarSeccion(fechaAntesDeCurrentDate, seccion)
 
-  })
+    search.addEventListener("input",(e)=>{
+      let filtrarPorEvento = filtrarPorEventos(fechaAntesDeCurrentDate)
+      let filtrarPorBusqueda = filtrarPorName(filtrarPorEvento, search.value)
+      llenarSeccion(filtrarPorBusqueda,seccion)
+      }
+    )
+
+    containerCheckbox.addEventListener("change", (e)=>{
+      let filtrarPorEvento = filtrarPorEventos(fechaAntesDeCurrentDate)
+      let filtrarPorBusqueda = filtrarPorName(filtrarPorEvento, search.value)
+      llenarSeccion(filtrarPorBusqueda,seccion)
+    })
+
+    })
   .catch(error => console.error(error))
 
-
-let seccion = document.getElementById("idseccion") 
-let formulario = document.getElementById("formularioEventos")
-let search = document.getElementById("search")
-let containerCheckbox = document.getElementById("containerCheckbox")
-
-
 const currentUrl = window.location.href;
-const links = document.querySelectorAll(".navbar-nav li a")
 for (let link of links) {
   if (link.href === currentUrl) {
     link.parentElement.classList.add("active");
   }
 }
-
-
 
 function crearCard(evento){
     return `<article class="card col-10 col-md-5 col-lg-4 col-xl-3 col-xxl-4 articles mt-4" id="articleCard">
@@ -72,24 +60,18 @@ function crearCard(evento){
   </article>`
 }
 
-function llenarSeccion(fechaAntesdeCurrentDate, elemento){
+
+function llenarSeccion(fechaAntesDeCurrentDate, elemento){
     elemento.innerHTML = ""
     let newTemplate = ""
-    fechaAntesdeCurrentDate.forEach( evento => newTemplate += crearCard(evento) )
+    fechaAntesDeCurrentDate.forEach( evento => newTemplate += crearCard(evento) )
     elemento.innerHTML = newTemplate
 }
 
-function filtrarPorName(fechaAntesdeCurrentDate, search){
-  return fechaAntesdeCurrentDate.filter((evento) => evento.name.toLowerCase().includes(search.toLowerCase()))
-}
 
-
-
-function llenarSeccionConBusqueda(fechaAntesdeCurrentDate, elemento){
-elemento.innerHTML = ""
-let newTemplate = ""
-fechaAntesdeCurrentDate.forEach( evento => newTemplate += crearCard(evento) )
-elemento.innerHTML = newTemplate
+function filtrarPorName(data, search){
+  let filtrarPorNames= data.filter((evento) => evento.name.toLowerCase().includes(search.toLowerCase()))
+   return filtrarPorNames
 }
 
 
@@ -99,6 +81,11 @@ return acumulador += `<div class="form-check form-check-inline">
                         <label class="form-check-label" for="${elementoActual}">${elementoActual}</label>
                       </div>`
 }
-
-
-
+  
+function filtrarPorEventos(data){
+  const categoria = Array.from( document.querySelectorAll(`input[type="checkbox"]:checked`)).map((check) =>check.value)
+  if(categoria.length == 0){
+    return data
+  }
+  return data.filter((evento) => categoria.includes(evento.category))
+}
