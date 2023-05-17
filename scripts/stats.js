@@ -53,7 +53,7 @@ fetch('https://mindhub-xj03.onrender.com/api/amazing')
     tr.innerHTML = `
       <th scope="row">${categoria}</th>
       <td>${ingresos}</td>
-      <td>${porcentajePorCategoria.toFixed(2)} %</td>
+      <td>${porcentajePorCategoria} %</td>
     `;
     return tr;
   }
@@ -98,7 +98,7 @@ fetch('https://mindhub-xj03.onrender.com/api/amazing')
       for(let i=0 ; i<porcentajeTotalPorCategoria.length ;i++ ){
         sumaDePorcentajes += porcentajeTotalPorCategoria[i]/porcentajeTotalPorCategoria.length
       }
-      porcentajePorCategoria.push(sumaDePorcentajes)
+      porcentajePorCategoria.push(sumaDePorcentajes.toFixed(2))
 
 /*       console.log(porcentajePorCategoria) */
     }
@@ -137,7 +137,7 @@ fetch('https://mindhub-xj03.onrender.com/api/amazing')
       for(let i=0 ; i<porcentajeTotalPorCategoria.length ;i++ ){
         sumaDePorcentajes += porcentajeTotalPorCategoria[i]/porcentajeTotalPorCategoria.length
       }
-      porcentajePorCategoria.push(sumaDePorcentajes)
+      porcentajePorCategoria.push(sumaDePorcentajes.toFixed(2))
 
 /*       console.log(porcentajePorCategoria) */
     }
@@ -149,14 +149,17 @@ fetch('https://mindhub-xj03.onrender.com/api/amazing')
 function llenarFilaEventsStatistics(eventos , elemento){
   elemento.innerHTML = "";
   let fragment = document.createDocumentFragment()
+  
   let eventosConCapacidades = eventos.map(evento =>(evento.name +" " +evento.capacity))
+  let eventoConPorcentaje = eventos.map(evento =>(evento.name +" "+(evento.assistance / evento.capacity)*100))
+  console.log(eventoConPorcentaje)
 
   let porcentajeTotalPorEventosPasados = eventos.map(evento =>((evento.assistance / evento.capacity)*100))
   let maximoPorcentaje =Math.max(...porcentajeTotalPorEventosPasados)
   let minimoPorcentaje =Math.min(...porcentajeTotalPorEventosPasados)
  /*  console.log(Object.values(eventoNameMaximo)) */
   console.log(porcentajeTotalPorEventosPasados)
-  let fila = crearFila(maximoPorcentaje,minimoPorcentaje,maximoPorcentaje)
+  let fila = crearFila(eventoConPorcentaje[2],eventoConPorcentaje[1],eventosConCapacidades[13])
   fragment = fila
   console.log(fragment)
   elemento.appendChild(fragment)
